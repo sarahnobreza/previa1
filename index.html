@@ -2,70 +2,81 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Stories Privado</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Sarah - Foto Privada</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden;
-      font-family: Arial, sans-serif;
-      /* background-color: black;  -- removido */
+    body { background-color: #000; font-family: 'Inter', sans-serif; overflow: hidden; }
+    
+    .progress-container {
+      position: absolute; top: 10px; left: 2%; width: 96%; height: 4px;
+      background: rgba(0,0,0,0.5); border-radius: 4px; z-index: 50; backdrop-filter: blur(2px);
+    }
+    .progress-bar {
+      height: 100%; background: #ec4899; width: 0%; border-radius: 4px;
+      box-shadow: 0 0 10px #ec4899;
+      transition: width linear;
     }
 
-    .bg {
-      background-image: url('https://s3.meucanalvip.org/sarinhaperfeita/fotopresell.jpeg');
-      background-size: cover;
-      background-position: center;
-      filter: none;
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      z-index: 0;                    /* ajustado para 0 */
-      transition: filter 1s ease;
+    #paywall {
+      display: none; opacity: 0; transition: opacity 0.4s ease;
+      background: #09090b;
     }
-
-    .bg.blur {
-      filter: blur(10px);
-    }
-
-    .texto {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: white;
-      font-size: 24px;
-      font-weight: bold;
-      text-align: center;
-      text-shadow: 1px 1px 4px #000;
-      opacity: 0;
-      transition: opacity 1s ease;
-      z-index: 1;                    /* texto acima da imagem */
-    }
-
-    .texto.visivel {
-      opacity: 1;
-    }
+    #paywall.show { display: flex; opacity: 1; }
   </style>
 </head>
-<body>
+<body class="h-screen w-screen relative text-white">
 
-  <div class="bg" id="fundo"></div>
+  <div id="media-container" class="absolute inset-0 z-0 bg-black">
+    <img src="https://s3.meucanalvip.org/sarinhaperfeita/Previa01.jpeg" class="w-full h-full object-cover">
+  </div>
 
-  <div class="texto" id="mensagem">
-    Stories privado da Sarah acabou...
+  <div id="ui-overlay" class="progress-container">
+    <div id="progressBar" class="progress-bar"></div>
+  </div>
+
+  <div id="paywall" class="absolute inset-0 z-50 flex-col items-center justify-center p-8 text-center">
+    <div class="mb-6 bg-pink-500/10 p-6 rounded-full border border-pink-500/30">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-pink-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+      </svg>
+    </div>
+
+    <h2 class="text-2xl font-bold text-white mb-2">Conteúdo Privado</h2>
+    <p class="text-gray-400 mb-8 text-sm">
+      Essa foto expirou. <br> O acesso foi bloqueado automaticamente.
+    </p>
+
+    <div class="mt-4 text-[10px] text-gray-600 uppercase tracking-widest">Acesso Restrito</div>
   </div>
 
   <script>
-    setTimeout(() => {
-      document.getElementById('fundo').classList.add('blur');
-      document.getElementById('mensagem').classList.add('visivel');
-    }, 8000); // após 8 segundos
-  </script>
+    // ================= CONFIGURAÇÃO =================
+    // Defina o tempo de duração (em segundos)
+    const TEMPO_SEGUNDOS = 8; 
+    // ================================================
 
+    const mediaContainer = document.getElementById('media-container');
+    const paywall = document.getElementById('paywall');
+    const progressBar = document.getElementById('progressBar');
+    const uiOverlay = document.getElementById('ui-overlay');
+
+    setTimeout(() => {
+      progressBar.style.transition = `width ${TEMPO_SEGUNDOS}s linear`;
+      progressBar.style.width = '100%';
+    }, 100);
+
+    setTimeout(() => {
+      mediaContainer.style.display = 'none'; 
+      uiOverlay.style.display = 'none';
+      paywall.classList.add('show');
+    }, TEMPO_SEGUNDOS * 1000);
+  </script>
 </body>
 </html>
+
 
 
 
